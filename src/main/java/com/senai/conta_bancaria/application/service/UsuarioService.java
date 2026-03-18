@@ -20,4 +20,9 @@ public class UsuarioService {
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
+
+    public Usuario buscarUsuarioPorId(Long id) {
+
+        return usuarioRepository.findById(id).get();
+    }
 }
