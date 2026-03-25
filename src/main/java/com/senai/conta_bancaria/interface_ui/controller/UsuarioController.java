@@ -1,5 +1,7 @@
 package com.senai.conta_bancaria.interface_ui.controller;
 
+import com.senai.conta_bancaria.application.dto.UsuarioRequestDTO;
+import com.senai.conta_bancaria.application.dto.UsuarioResponseDTO;
 import com.senai.conta_bancaria.application.service.UsuarioService;
 import com.senai.conta_bancaria.domain.entity.Usuario;
 import org.apache.coyote.Response;
@@ -19,29 +21,30 @@ public class UsuarioController {
     UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) {
-        Usuario usuarioCadastrado = usuarioService.cadastrarUsuario(usuario);
+    public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@RequestBody UsuarioRequestDTO usuarioRequestDTO) {
 
-        return ResponseEntity.created(URI.create("/usuario"+usuario.getId())).body(usuarioCadastrado);
+        UsuarioResponseDTO usuarioCadastrado = usuarioService.cadastrarUsuario(usuarioRequestDTO);
+
+        return ResponseEntity.created(URI.create("/usuario"+usuarioCadastrado.id())).body(usuarioCadastrado);
 
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
+    public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios() {
 
         return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarUsuarioPorId(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDTO> buscarUsuarioPorId(@PathVariable Long id) {
 
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioRequestDTO) {
 
-        return ResponseEntity.ok(usuarioService.atualizarUsuario(id, usuario));
+        return ResponseEntity.ok(usuarioService.atualizarUsuario(id, usuarioRequestDTO));
 
     }
 

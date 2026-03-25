@@ -1,5 +1,7 @@
 package com.senai.conta_bancaria.application.service;
 
+import com.senai.conta_bancaria.application.dto.UsuarioRequestDTO;
+import com.senai.conta_bancaria.application.dto.UsuarioResponseDTO;
 import com.senai.conta_bancaria.domain.entity.Usuario;
 import com.senai.conta_bancaria.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,32 +16,29 @@ public class UsuarioService {
     UsuarioRepository usuarioRepository;
 
     //Metodo para cadastrar um usuario
-    public Usuario cadastrarUsuario(Usuario usuario) {
-        usuarioRepository.save(usuario);
-        return usuario;
+    public UsuarioResponseDTO cadastrarUsuario( UsuarioRequestDTO usuarioRequestDTO) {
+
+        return UsuarioResponseDTO.fromEntity(usuarioRepository.save(usuarioRequestDTO.toEntity()));
     }
 
     //Metodo para listar todos os usuarios
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDTO> listarUsuarios() {
+        return usuarioRepository.findAll().stream().map(UsuarioResponseDTO::fromEntity).toList();
     }
 
     //Metodo para buscar usuario especifico
-    public Usuario buscarUsuarioPorId(Long id) {
+    public UsuarioResponseDTO buscarUsuarioPorId(Long id) {
 
-        return usuarioRepository.findById(id).get();
+        return UsuarioResponseDTO.fromEntity(usuarioRepository.findById(id).get());
     }
 
-    public Usuario atualizarUsuario(Long id, Usuario usuario) {
-        Usuario usuarioAtualizado = buscarUsuarioPorId(id);
+    public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioRequestDTO usuarioRequestDTO) {
+        Usuario usuarioAtualizado = usuarioRepository.findById(id).get();
 
-        if (usuarioAtualizado != null) {
-            usuarioAtualizado.setNome(usuario.getNome());
-            usuarioAtualizado.setEmail(usuario.getEmail());
-            usuarioAtualizado.setSenha(usuario.getSenha());
-            return usuarioRepository.save(usuarioAtualizado);
-        }
-        return null;
+        usuarioAtualizado.setNome(usuarioRequestDTO.nome());
+        usuarioAtualizado.setEmail(usuarioRequestDTO.email());
+        usuarioAtualizado.setSenha(usuarioRequestDTO.senha());
+        return UsuarioResponseDTO.fromEntity(usuarioRepository.save(usuarioAtualizado));
 
     }
 
