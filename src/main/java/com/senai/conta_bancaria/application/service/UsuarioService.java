@@ -7,30 +7,37 @@ import com.senai.conta_bancaria.domain.exception.UsuarioNaoEncontradoException;
 import com.senai.conta_bancaria.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+
 @Service
 public class UsuarioService {
+
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    //Metodo para cadastrar um usuario
-    public UsuarioResponseDTO cadastrarUsuario( UsuarioRequestDTO usuarioRequestDTO) {
+    public UsuarioResponseDTO cadastrarUsuario(UsuarioRequestDTO usuarioRequestDTO) {
 
-        return UsuarioResponseDTO.fromEntity(usuarioRepository.save(usuarioRequestDTO.toEntity()));
+        return UsuarioResponseDTO.fromEntity(
+                usuarioRepository.save(
+                        usuarioRequestDTO.toEntity()
+                )
+        );
     }
 
-    //Metodo para listar todos os usuarios
     public List<UsuarioResponseDTO> listarUsuarios() {
-        return usuarioRepository.findAll().stream().map(UsuarioResponseDTO::fromEntity).toList();
+        return usuarioRepository.findAll()
+                .stream().map(
+                        UsuarioResponseDTO::fromEntity
+                ).toList();
     }
 
-    //Metodo para buscar usuario especifico
     public UsuarioResponseDTO buscarUsuarioPorId(Long id) {
 
-        return UsuarioResponseDTO.fromEntity(usuarioRepository.findById(id).orElseThrow(() -> new UsuarioNaoEncontradoException(id)));
+        return UsuarioResponseDTO.fromEntity(usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(id))
+        );
     }
 
     public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioRequestDTO usuarioRequestDTO) {
@@ -40,13 +47,13 @@ public class UsuarioService {
         usuarioAtualizado.setNome(usuarioRequestDTO.nome());
         usuarioAtualizado.setEmail(usuarioRequestDTO.email());
         usuarioAtualizado.setSenha(usuarioRequestDTO.senha());
+
         return UsuarioResponseDTO.fromEntity(usuarioRepository.save(usuarioAtualizado));
-
-
     }
 
     public void deletarUsuario(Long id) {
-        if (!usuarioRepository.existsById(id)) {
+
+        if(!usuarioRepository.existsById(id)){
             throw new UsuarioNaoEncontradoException(id);
         }
         usuarioRepository.deleteById(id);

@@ -1,4 +1,4 @@
 package com.senai.conta_bancaria.domain.entity;
 
-public class Gerente extends Usuario {
+public class  Gerente extends Usuario {
 }

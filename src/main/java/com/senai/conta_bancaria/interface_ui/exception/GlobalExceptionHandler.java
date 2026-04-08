@@ -13,19 +13,22 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.senai.conta_bancaria.interface_ui.exception.ProblemDetailsUtils.buildProblem;
+import static com.senai.conta_bancaria.interface_ui.exception.ProblemDetailUtils.buildProblem;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsuarioNaoEncontradoException.class)
-    public ProblemDetail handlerUsuarioNaoEncontradoException(HttpServletRequest request, UsuarioNaoEncontradoException ex) {
+    public ProblemDetail handlerUsuarioNaoEncontradoException(
+            HttpServletRequest request,
+            UsuarioNaoEncontradoException ex
+    ) {
         return buildProblem(
                 HttpStatus.NOT_FOUND,
-                "Usuário não encontrado",
-                "O Usuário solicitado não foi encontrado no sistema",
+                "Usuario não encontrado",
+                "O usuário solicitado não foi encontrado no sistema.",
                 request.getRequestURL().toString()
-        );
+        ) ;
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
