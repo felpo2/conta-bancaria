@@ -23,4 +23,23 @@ public class Conta {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     protected Usuario usuario;
+
+    public void saque(Long valorSaque) {
+        if (valorSaque > 0) {
+            this.saldo -= valorSaque;
+        }
+    }
+
+    public void deposito(Long valorDeposito) {
+        if (valorDeposito > 0) {
+            this.saldo += valorDeposito;
+        }
+    }
+    public void transferencia(Conta contaDestino, Long valorTransferir) {
+        if (valorTransferir > 0) {
+            this.saldo -= valorTransferir;
+        }
+    }
+
+
 }

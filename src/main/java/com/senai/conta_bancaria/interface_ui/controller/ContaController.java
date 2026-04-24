@@ -1,8 +1,8 @@
 package com.senai.conta_bancaria.interface_ui.controller;
 
-import com.senai.conta_bancaria.application.dto.ContaRequestDTO;
-import com.senai.conta_bancaria.application.dto.ContaResponseDTO;
+import com.senai.conta_bancaria.application.dto.*;
 import com.senai.conta_bancaria.application.service.ContaService;
+import com.senai.conta_bancaria.domain.entity.Conta;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -90,5 +90,20 @@ public class ContaController {
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         contaService.deletarConta(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/saque/{id}")
+    public  ResponseEntity<ContaResponseDTO> sacar(@PathVariable Long id, @RequestBody SaqueDTO saqueDTO) {
+        return ResponseEntity.ok(contaService.saque(id, saqueDTO));
+    }
+
+    @PostMapping("/deposito/{id}")
+    public  ResponseEntity<ContaResponseDTO> depositar(@PathVariable Long id, @RequestBody DepositoDTO depositoDTO) {
+        return ResponseEntity.ok(contaService.deposito(id, depositoDTO));
+    }
+
+    @PostMapping("/transferir/{id}")
+    public ResponseEntity<ContaResponseDTO> transferir(@PathVariable Long id, @RequestBody TransferenciaDTO transferenciaDTO) {
+        return ResponseEntity.ok(contaService.transferir(transferenciaDTO.idPartida(), transferenciaDTO, transferenciaDTO.idDestino() ));
     }
 }

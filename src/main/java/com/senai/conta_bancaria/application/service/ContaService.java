@@ -1,13 +1,8 @@
 package com.senai.conta_bancaria.application.service;
 
-import com.senai.conta_bancaria.application.dto.ContaRequestDTO;
-import com.senai.conta_bancaria.application.dto.ContaResponseDTO;
-import com.senai.conta_bancaria.application.dto.UsuarioRequestDTO;
-import com.senai.conta_bancaria.application.dto.UsuarioResponseDTO;
+import com.senai.conta_bancaria.application.dto.*;
 import com.senai.conta_bancaria.domain.entity.Conta;
-import com.senai.conta_bancaria.domain.entity.Usuario;
 import com.senai.conta_bancaria.domain.exception.ContaNaoEncontradaException;
-import com.senai.conta_bancaria.domain.exception.UsuarioNaoEncontradoException;
 import com.senai.conta_bancaria.domain.repository.ContaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +51,37 @@ public class ContaService {
             throw new ContaNaoEncontradaException(id);
         }
         contaRepository.deleteById(id);
+    }
+
+    public ContaResponseDTO saque(Long id, SaqueDTO saqueDTO) {
+
+        Conta conta = contaRepository.findById(id)
+                .orElseThrow(() -> new ContaNaoEncontradaException(id));
+
+        conta.saque(saqueDTO.valor());
+        return  ContaResponseDTO.fromEntity(contaRepository.save(conta));
+
+    }
+
+
+    public ContaResponseDTO deposito(Long id, DepositoDTO depositoDTO) {
+
+        Conta conta = contaRepository.findById(id)
+                .orElseThrow(() -> new ContaNaoEncontradaException(id));
+
+        conta.deposito(depositoDTO.valor());
+
+        return ContaResponseDTO.fromEntity(contaRepository.save(conta));
+    }
+
+    public ContaResponseDTO transferir(Long idPartida, TransferenciaDTO transferenciaDTO, Long idDestino) {
+        Conta contaPartida = contaRepository.findById(idPartida)
+                .orElseThrow(() -> new ContaNaoEncontradaException(idPartida));
+
+        Conta contaDestino = contaRepository.findById(idDestino)
+                .orElseThrow(() -> new  ContaNaoEncontradaException(idDestino));
+
+        contaPartida.transferencia(contaDestino, transferenciaDTO.valor());
+        return  ContaResponseDTO.fromEntity(contaRepository.save(contaPartida));
     }
 }
