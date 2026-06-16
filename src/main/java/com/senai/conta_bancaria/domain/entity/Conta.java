@@ -25,12 +25,24 @@ public class Conta {
     protected Usuario usuario;
 
     public void saque(Long valorSaque) {
+
+        if (valorSaque <= 0) {
+            throw new IllegalArgumentException("O valor do saque deve ser maior que zero.");
+        }
+        if (this.saldo < valorSaque) {
+            throw new IllegalArgumentException("Saldo insuficiente para realizar o saque.");
+        }
+
         if (valorSaque > 0) {
             this.saldo -= valorSaque;
         }
     }
 
     public void deposito(Long valorDeposito) {
+        if (valorDeposito <= 0) {
+            throw new IllegalArgumentException("O valor do depósito deve ser maior que zero.");
+        }
+
         if (valorDeposito > 0) {
             this.saldo += valorDeposito;
         }
