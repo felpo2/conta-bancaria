@@ -36,10 +36,15 @@ public class Conta {
         }
     }
     public void transferencia(Conta contaDestino, Long valorTransferir) {
-        if (valorTransferir > 0) {
-            this.saldo -= valorTransferir;
+        if (valorTransferir <= 0) {
+            throw new IllegalArgumentException("O valor da transferência deve ser maior que zero.");
         }
-    }
+        if (this.saldo < valorTransferir) {
+            throw new IllegalArgumentException("Saldo insuficiente para realizar a transferência.");
+        }
 
+        this.saldo -= valorTransferir;
+        contaDestino.deposito(valorTransferir);
+    }
 
 }
